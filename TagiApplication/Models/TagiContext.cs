@@ -94,64 +94,6 @@ namespace TagiApplication.Models
                     .Metadata
                     .SetBeforeSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
             });
-
-            /*
-            // TODO: Dynaamiseksi, nämä ovat alkuperäiset          
-            modelBuilder.Entity<Tagi>(entity =>
-            {
-                foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-                {
-                    if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
-                    {
-                        entity.HasQueryFilter(e => e.Poistettu == null);
-                    }
-
-                    // Identity-kentän käsittely
-                    entity.HasKey(e => e.Id);
-                    entity.Property(e => e.Id)
-                        .ValueGeneratedOnAdd()
-                        .Metadata
-                        .SetBeforeSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
-                }
-            });
-
-            modelBuilder.Entity<ResurssiTagi>(entity =>
-            {
-                foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-                {
-                    if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
-                    {
-                        entity.HasQueryFilter(e => e.Poistettu == null);
-                    }
-
-                    // Identity-kentän käsittely
-                    entity.HasKey(e => e.Id);
-                    entity.Property(e => e.Id)
-                        .ValueGeneratedOnAdd()
-                        .Metadata
-                        .SetBeforeSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
-                }
-            });
-
-            modelBuilder.Entity<JonottajaTagi>(entity =>
-            {
-                foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-                {
-                    if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
-                    {
-                        entity.HasQueryFilter(e => e.Poistettu == null);
-                    }
-
-                    // Identity-kentän käsittely
-                    entity.HasKey(e => e.Id);
-                    entity.Property(e => e.Id)
-                        .ValueGeneratedOnAdd()
-                        .Metadata
-                        .SetBeforeSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
-                }
-            });
-
-            */
         }
 
         /**
