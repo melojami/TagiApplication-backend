@@ -1,0 +1,104 @@
+﻿set nocount on
+if OBJECT_ID('vp_resurssi_tagi') is not null drop table vp_resurssi_tagi
+if OBJECT_ID('vp_jonottaja_tagi') is not null drop table vp_jonottaja_tagi
+if OBJECT_ID('vp_jonottaja') is not null drop table vp_jonottaja
+if OBJECT_ID('vp_jono') is not null drop table vp_jono
+if OBJECT_ID('vp_resurssi') is not null drop table vp_resurssi
+if OBJECT_ID('vp_tagi') is not null drop table vp_tagi
+if OBJECT_ID('vp_resurssityyppi') is not null drop table vp_resurssityyppi
+
+create table vp_resurssityyppi (
+	id int not null primary key identity(1, 1),
+	nimi varchar(50) not null,
+	poistettuUTc datetime null
+)
+insert into vp_resurssityyppi(nimi) values ('Kustannuspaikka')
+insert into vp_resurssityyppi(nimi) values ('Autopaikka')
+insert into vp_resurssityyppi(nimi) values ('Sauna')
+go
+create table vp_resurssi (
+	id int not null primary key identity(1, 1),
+	resurssityyppiid int not null,
+	tarkenne varchar(50) not null,
+	rootid int null,
+	nimi varchar(50) not null,
+	sijainti varchar(50) not null,
+	poistettuUTc datetime null
+	foreign key(resurssityyppiid) references vp_resurssityyppi(id),
+	foreign key(rootid) references vp_resurssi(id)
+)
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (1, '', null, 'As Oy Hermolan Parantola', '')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Kylmäpaikka', 1, '001', 'Parkkialue 1')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Kylmäpaikka', 1, '002', 'Parkkialue 1')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Hallipaikka', 1, 'Halli 12', 'Autohalli')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Hallipaikka', 1, 'Halli 20', 'Autohalli')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Hallipaikka', 1, 'Hallipaikka 3', 'Autohalli')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Tolppapaikka', 1, '044', 'Autopaikka-alue 2')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Tolppapaikka', 1, '045', 'Autopaikka-alue 2')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Tolppapaikka', 1, '053', 'Autopaikka-alue 2')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Tolppapaikka', 1, '055', 'Autopaikka-alue 2')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Autokatos', 1, 'Katos 1', 'Katospaikat E-rappu')
+insert into vp_resurssi (resurssityyppiid, tarkenne, rootid, nimi, sijainti) values (2, 'Autokatos', 1, 'Katos 2', 'Katospaikat E-rappu')
+
+go
+create table vp_jono (
+	id int not null primary key,
+	resurssiid int not null,
+	resurssityyppiid int not null,
+	nimi varchar(50) not null,
+	poistettuUTc datetime null,
+	foreign key(resurssityyppiid) references vp_resurssityyppi(id)
+)
+insert into vp_jono(id, resurssiid, resurssityyppiid, nimi) values (1, 1, 2, 'Autopaikkajono')
+go
+create table vp_jonottaja (
+	id int not null primary key identity(1, 1),
+	jonoid int not null,
+	nimi varchar(50) not null,
+	otsikko varchar(50) not null,
+	kaikkien_ehtojen_tasmattava bit not null,
+	poistettuUTc datetime null,
+	--kuvaus varchar(2000) not null,
+	foreign key(jonoid) references vp_jono(id)
+)
+insert into vp_jonottaja(jonoid, nimi, otsikko, kaikkien_ehtojen_tasmattava/*, kuvaus*/) values (1, 'Atte Asukas', 'Haluan hallipaikan', 1)
+insert into vp_jonottaja(jonoid, nimi, otsikko, kaikkien_ehtojen_tasmattava/*, kuvaus*/) values (1, 'Jonne Jonottaja', 'Mikä tahansa autopaikka', 0)
+insert into vp_jonottaja(jonoid, nimi, otsikko, kaikkien_ehtojen_tasmattava/*, kuvaus*/) values (1, 'Rolle Ronkeli', 'Autohallista reuna hakusessa', 1)
+insert into vp_jonottaja(jonoid, nimi, otsikko, kaikkien_ehtojen_tasmattava/*, kuvaus*/) values (1, 'Kille Killström', 'Lämpötolppapaikka tai katospaikka', 0)
+insert into vp_jonottaja(jonoid, nimi, otsikko, kaikkien_ehtojen_tasmattava/*, kuvaus*/) values (1, 'Virpi Vipeltäjä', 'Kylmäpaikkaa haen', 1)
+go
+create table vp_tagi (
+	id int not null primary key identity(1,1),
+	resurssityyppiid int not null,
+	nimi varchar(50),
+	poistettuUTc datetime null,
+	foreign key(resurssityyppiid) references vp_resurssityyppi(id)
+)
+insert into vp_tagi (resurssityyppiid, nimi) values (2, 'Lämpötolppapaikka')
+insert into vp_tagi (resurssityyppiid, nimi) values (2, 'Hallipaikka')
+insert into vp_tagi (resurssityyppiid, nimi) values (2, 'Reunapaikka')
+insert into vp_tagi (resurssityyppiid, nimi) values (2, 'Kylmäpaikka')
+insert into vp_tagi (resurssityyppiid, nimi) values (2, 'Katospaikka')
+insert into vp_tagi (resurssityyppiid, nimi) values (2, 'Lähellä ulko-ovea')
+go
+create table vp_resurssi_tagi (
+	id int not null primary key identity(1, 1),
+	resurssiid int not null,
+	tagiid int not null,
+	poistettuUTc datetime null,
+	foreign key(resurssiid) references vp_resurssi(id),
+	foreign key(tagiid) references vp_tagi(id),
+	constraint UC_resurssi_tagi unique (resurssiid, tagiid, poistettuUtc)
+)
+
+go
+create table vp_jonottaja_tagi (
+	id int not null primary key identity(1, 1),
+	jonottajaid int not null,
+	tagiid int not null,
+	poistettuUTc datetime null,
+	foreign key(jonottajaid) references vp_jonottaja(id),
+	foreign key(tagiid) references vp_tagi(id),
+	constraint UC_jonottaja_tagi unique (jonottajaid, tagiid, poistettuUtc)
+)
+set nocount off
